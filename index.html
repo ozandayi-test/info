@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ozan Dayı Restaurant Menu</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f8f8f8f8;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .menu-container{
+            display: grid;
+            gap:20px ;
+            grid-template-columns: repeat(auto-fit, minmax(300px , 1fr));
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .menu-card{
+            background-color:white ;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .menu-card:hover{
+            transform: scale(1.05);
+        }
+
+        .menu-image{
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .menu-content{
+            padding:15px ;
+        }
+
+        .menu-title{
+            font-size: 1.5rem;
+            padding-bottom: 15px;
+        }
+
+        .menu-description{
+            color: #555;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .menu-price{
+            color: red;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        h1{
+            padding-bottom: 15px;
+        }
+
+        @media(max-width:600px){
+            body{
+                padding: 10px;
+            }
+
+            /* .menu-container{
+                display: block;
+                
+            }
+
+            .menu-card{
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: space-between;
+                
+            } */
+
+            .menu-card:hover{
+                transform: none;
+                
+            }
+
+            /* .menu-content{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                
+            } */
+
+            /* .menu-price:before{
+                content: attr("$");
+            }
+
+            .menu-price:before:hover{
+                color: green;
+                transition: 0.5s;
+                transform: scaleY(-5);
+            } */
+        }
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <h1>Menu</h1>
+    <div class="menu-container" id="menu-container">
+        <div class="menu-card">
+            <img src="/piav.jpeg" alt="Pilav" class="menu-image">
+            <div class="menu-content">
+                <div class="menu-title">Pilav</div>
+                <div class="menu-description">Ev Yapımı Yemek</div>
+                <div class="menu-price">95 TL</div>
+            </div>
+        </div>
+        <div class="menu-card">
+            <img src="/kebap.jpeg" alt="Kebap" class="menu-image">
+            <div class="menu-content">
+                <div class="menu-title">Adana Kebap</div>
+                <div class="menu-description">Odun Ateşi Mangalında</div>
+                <div class="menu-price">200 TL</div>
+            </div>
+        </div>
+        <div class="menu-card">
+            <img src="/dubai çikolatası.jpeg" alt="Dubai Çikolata" class="menu-image">
+            <div class="menu-content">
+                <div class="menu-title">Dubai Cikolata</div>
+                <div class="menu-description">El Yapımı Tatlı</div>
+                <div class="menu-price">150 TL</div>
+            </div>
+        </div>
+        <div class="menu-card">
+            <img src="/kebap.jpeg" alt="Kebap" class="menu-image">
+            <div class="menu-content">
+                <div class="menu-title">Urfa Kebap</div>
+                <div class="menu-description">Mangalda Özel</div>
+                <div class="menu-price">180 TL</div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <button id="add-dish-button">Yeni Yemek Ekleme</button>
+
+    <div id="form-container" class="display: none;">
+        <h2>Yeni Yemek Ekle</h2>
+        <form id="menu-form">
+            <input type="text" id="dish-name" placeholder="Yemek Adı" required ><br>
+            <input type="text" id="dish-description" placeholder="Açıklama" required ><br>
+            <input type="number" id="dish-price" placeholder="Fiyat" required ><br>
+            <input type="file" id="dish-image" placeholder="image/*"><br>
+            <input type="url" id="dish-image-url" placeholder="Görsel Url (Opsiyonel)"><br>
+            <button type="submit">Yemek Ekle</button>
+        </form>
+    </div>
+
+    <script>
+
+    const menuContainer = document.getElementById('menu-container')
+    const menuForm = document.getElementById('menu-form')
+    const addDishButton = document.getElementById('add-dish-button')
+    const formContainer = document.getElementById('form-container')
+
+
+    addDishButton.addEventListener('click' , function(){
+        formContainer.style.display = 'block';
+    })
+
+    menuForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+ 
+
+    //form alanlarından veri çekme
+    const dishName = document.getElementById('dish-name').value;
+    const dishDescription = document.getElementById('dish-description').value; // Yemek açıklaması
+    const dishPrice = document.getElementById('dish-price').value; // Yemek fiyatı
+    const dishImageFile = document.getElementById('dish-image').files[0]; // Yemek resim dosyası (kullanıcı tarafından yüklenmişse)
+    const dishImageUrl = document.getElementById('dish-image-url').value; // Yemek resmi için URL
+
+    // resim dosyası varsa önce onu oku
+
+    if (dishImageFile) {
+        const reader = new FileReader(); // Dosya okuyucu nesnesi oluşturma
+        reader.onload = function (e) {
+            // Resim okunduğunda menü kartına ekleme
+            addMenuCard(dishName, dishDescription, dishPrice, e.target.result);
+        };
+        reader.readAsDataURL(dishImageFile); // Resim dosyasını veri URL'si olarak okur
+    } 
+    // resim dosyası yoksa url ekle
+    else if(dishImageUrl ){
+        addMenuCard(dishName, dishDescription, dishPrice,dishImageUrl)
+    }
+    //formu sıfırla ve formu gizle
+    menuForm.reset();
+    formContainer.style.display = 'none';
+});
+
+
+// Menü kartını eklemek için fonksiyon
+    function addMenuCard(name, description, price, imageUrl) {
+    // Yeni bir menü kartı oluşturma
+    const menuCard = document.createElement('div');
+    menuCard.classList.add('menu-card'); // Kart stilini uygulama
+
+    // Menü kartının içeriğini ayarlama
+    menuCard.innerHTML = `
+        <img src="${imageUrl}" alt="${name}" class="menu-image">
+        <div class="menu-content">
+            <div class="menu-title">${name}</div>
+            <div class="menu-description">${description}</div>
+            <div class="menu-price">${price} TL</div>
+        </div>
+    `;
+
+    // Menü kartını ana kapsayıcıya ekleme
+    menuContainer.appendChild(menuCard);
+}
+
+
+</script>
+    
+</body>
+</html>
